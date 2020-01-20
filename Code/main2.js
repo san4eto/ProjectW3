@@ -1,32 +1,3 @@
-class Game {
-  constructor() {
-    console.log("test");
-    this.obstacles = [];
-    this.friendlyObjects = [];
-  }
-
-  init() {
-    this.background = new Background();
-    //this.player = new Player();
-    this.obstacles = new Obstacles();
-    //  this.friendlyObj = new FriendlyObj();
-  }
-  setup() {
-    //this.player.setup();
-    //this.background.setup();
-    //this.obstacles.setup();
-    // this.friendlyObj.draw();
-  }
-  draw() {
-    //this.player.draw();
-    this.background.draw();
-    this.obstacles.draw();
-    //this.friendlyObj.draw();
-  }
-}
-
-const game = new Game();
-
 function preload() {
   console.log("PRELOAD");
   game.init();
@@ -101,7 +72,8 @@ class Background {
     ];
   }
 
-  move(pic) {
+  //MOVE  THE LAYERS
+  move() {
     // image(imageXY, x, y) //CheCk IF OK
     image(pic.src, 0, pic.y);
     image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
