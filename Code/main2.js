@@ -7,21 +7,21 @@ class Game {
 
   init() {
     this.background = new Background();
-    this.player = new Player();
+    //this.player = new Player();
     this.obstacles = new Obstacles();
-    this.friendlyObj = new FriendlyObj();
+    //  this.friendlyObj = new FriendlyObj();
   }
-
-  draw() {
-    this.background.draw();
-
-    this.obstacles.draw();
-
-    this.player.draw();
-  }
-
   setup() {
-    this.player.setup();
+    //this.player.setup();
+    //this.background.setup();
+    //this.obstacles.setup();
+    // this.friendlyObj.draw();
+  }
+  draw() {
+    //this.player.draw();
+    this.background.draw();
+    this.obstacles.draw();
+    //this.friendlyObj.draw();
   }
 }
 
@@ -34,7 +34,9 @@ function preload() {
 
 function setup() {
   // createCanvas(width, height)
-  createCanvas(1667, 770); // to match the bg images dimensions
+  createCanvas(1920, 1080); // to match the bg images dimensions
+  stillImages = loadImage("Background/road flat.png");
+  console.log("DRAW iMAGE");
   game.setup();
 }
 
@@ -44,18 +46,57 @@ function draw() {
 
 class Background {
   constructor() {
+    this.imageCount = 0;
+
     this.images = [
       {
-        src: loadImage("Background/1920x1080.png"),
+        src: loadImage("Background/night sky.png"),
         x: 0,
-        y: 0,
-        speed: 1
+        y: 1080,
+        speed: 3
       },
       {
-        src: loadImage("Background/1920x1080.png"),
+        src: loadImage("Background/layer_07_1920 x 1080.png"),
         x: 0,
-        y: 0,
-        speed: 2
+        y: 1080,
+        speed: 3
+      },
+      {
+        src: loadImage("Background/layer_06_1920 x 1080.png"),
+        x: 0,
+        y: 1080,
+        speed: 3
+      },
+      {
+        src: loadImage("Background/layer_05_1920 x 1080.png"),
+        x: 0,
+        y: 1080,
+        speed: 3
+      },
+      {
+        src: loadImage("Background/layer_04_1920 x 1080.png"),
+        x: 0,
+        y: 1080,
+        speed: 3
+      },
+
+      {
+        src: loadImage("Background/layer_03_1920 x 1080.png"),
+        x: 0,
+        y: 1080,
+        speed: 4
+      },
+      {
+        src: loadImage("Background/layer_02_1920 x 1080.png"),
+        x: 0,
+        y: 1600,
+        speed: 5
+      },
+      {
+        src: loadImage("Background/layer_01_1920 x 1080.png"),
+        x: 0,
+        y: 1080,
+        speed: 5
       }
     ];
   }
@@ -63,44 +104,65 @@ class Background {
   move(pic) {
     // image(imageXY, x, y) //CheCk IF OK
     image(pic.src, 0, pic.y);
-    image(pic.src, 0, pic.y - pic.height / 2); // width is the width of the canvas P5
+    image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
 
-    pic.y -= pic.speed;
-    if (pic.y <= -height) {
-      pic.y = 0;
+    if (pic.y > 0) {
+      console.log("fhfh");
+      pic.y -= pic.speed; //make it stop at the top and load next one
     }
   }
 
   draw() {
-    const c = color(255, 204, 0);
-    background(c);
-
-    for (let i = 0; i < this.images.length; i++) {
+    //image(stillImage, 1000, 1000, 1000, 1000);
+    //background(stillImage);
+    // const c = color(255, 204, 0);
+    // background(c);
+    //make it stop at the top and load next one
+    // for (let i = 0; i < this.images.length; i++) {
+    //   //for (let i = 0; i < 5; i++) {
+    //   this.move(this.images[i]);
+    // }
+    if (frameCount % 240 === 0) {
+      this.imageCount += 1;
+      if (this.imageCount >= this.images.length) {
+        this.imageCount = this.images.length - 1; //
+      }
+    }
+    for (let i = 0; i <= this.imageCount; i++) {
+      //this.imageCount
       this.move(this.images[i]);
     }
   }
 }
-class FriendlyObj {
-  constructor() {
-    this.width = 25;
-    this.height = 25;
 
-    this.images = [
-      {
-        src: loadImage("flame_bottle.png"),
-        x: 0,
-        y: 0,
-        speed: 1
-      },
-      {
-        src: loadImage("flame_not royalty free.jpg"),
-        x: 0,
-        y: 0,
-        speed: 2
-      }
-    ];
-  }
-}
+// class FriendlyObj {
+//   constructor() {
+//     this.width = 25;
+//     this.height = 25;
+
+//     this.images = [
+//       {
+//         //src: loadImage("flame_bottle.png"),
+//         x: 0,
+//         y: 0,
+//         speed: 1
+//       },
+//       {
+//         src: loadImage("flame_not royalty free.jpg"),
+//         x: 0,
+//         y: 0,
+//         speed: 2
+//       }
+//     ];
+//   }
+//   setup() {
+//     this.friendlyObj.setup();
+//   }
+//   draw() {
+//     this.friendlyObj.draw();
+//   }
+// }
+// const friendlyObj = new FriendlyObj();
 
 class Obstacles {
   constructor() {
@@ -151,6 +213,7 @@ class Obstacles {
     return true;
   }
 }
+const obstacles = new Obstacles();
 class Player {
   constructor() {
     this.images = [
@@ -168,8 +231,8 @@ class Player {
       },
       {
         src: loadImage("Hands/hand yellow.png"),
-        x: 0,
-        y: 0,
+        x: 50,
+        y: 50,
         speed: 1
       }
     ];
@@ -187,3 +250,4 @@ class Player {
   //   move() {
   //     }
 }
+const player = new Player();
