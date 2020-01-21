@@ -8,8 +8,10 @@ class Game {
   init() {
     this.background = new Background();
     this.player = new Player();
-    this.obstacles = new Obstacles();
+    this.stopSign = new Obstacles();
+    this.trafficLight = new Obstacles();
     this.friendlyObj = new FriendlyObj();
+    this.vehicles = new Vehicles();
   }
   setup() {
     //this.player.setup();
@@ -18,10 +20,24 @@ class Game {
     // this.friendlyObj.draw();
   }
   draw() {
-    this.player.draw();
     this.background.draw();
-    this.obstacles.draw();
+    this.player.draw();
+    this.stopSign.drawStopSign();
+    this.trafficLight.drawTraffic();
     this.friendlyObj.draw();
+    this.vehicles.draw();
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 37) {
+    this.stopSign.moveLeft();
+  } else if (keyCode === 39) {
+    this.x += 20;
+  } else if (keyCode === 40) {
+    this.y += 20;
+  } else if (keyCode === 38) {
+    this.y -= 20;
   }
 }
 
@@ -142,6 +158,8 @@ class Background {
 
 class Player {
   constructor() {
+    this.y = height;
+    this.x = width / 2;
     this.images = [
       {
         src: loadImage("DeliveryHeroes/baby_batman.png"),
@@ -160,6 +178,12 @@ class Player {
         x: 50,
         y: 50,
         speed: 1
+      },
+      {
+        src: loadImage("DeliveryHeroes/bubblesPowerpuff.png"),
+        x: 50,
+        y: 50,
+        speed: 1
       }
     ];
   }
@@ -168,54 +192,74 @@ class Player {
     image(this.images[0].src, 0, 0, 200, 200);
   }
 
+  moveDown() {
+    if (keyPressed(40)) {
+      console.log("down");
+      {
+        this.y += 20;
+      }
+    }
+  }
+  moveUp() {
+    if (keyPressed(38)) {
+      console.log("up");
+      {
+        this.y -= 20;
+      }
+    }
+  }
+  moveLeft() {
+    if (keyPressed == 37) {
+      console.log("left");
+      {
+        this.x -= 200;
+      }
+    }
+  }
+  moveRight() {
+    if (keyPressed(39)) {
+      console.log("right");
+      {
+        this.x += 20;
+      }
+    }
+  }
+
   draw() {
     console.log("sth");
+
     for (let i = 0; i < this.images.length; i++) {
-      image(this.images[i].src, 0, 0, 200, 200);
+      image(this.images[i].src, width / 2 - 200, height - 200, 200, 200);
     }
   }
-
-  //   move() {
-  //     }
 }
 
+//OBSTACLES
 class Obstacles {
   constructor() {
-    this.images = [
-      {
-        src: loadImage("stopSign.png"),
-        x: 0,
-        y: 0,
-        speed: 1
-      },
-      {
-        src: loadImage("trafficLight.png"),
-        x: 0,
-        y: 0,
-        speed: 2
-      }
-    ];
-    // this.x = width;
-    // this.y = random(0, height - this.height);
-    // random() is a p5 function that accepts a range
+    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
+    this.stopSign = loadImage("stopSign.png");
+
+    this.trafficLight = loadImage("trafficLight.png");
   }
 
-  setup() {
-    image(this.images[i].src, 0, 0, 200, 200);
-  }
-  draw() {
+  setup() {}
+  drawTraffic() {
     console.log("testObstcl");
-    for (let i = 0; i < this.images.length; i++) {
-      image(this.images[i].src, 0, 0, 200, 200);
-    }
+    image(this.trafficLight, this.xlocation, this.ylocation, 200, 200);
+  }
+
+  drawStopSign() {
+    image(this.stopSign, this.xlocation, this.ylocation, 200, 200);
   }
 
   collides() {
     // check if obj collides with self
     // self completely to the left || self completely to the right
     if (
-      this.x + this.width < friendlyObj.x ||
-      friendlyObj.x + friendlyObj.width < this.x
+      (this.x + this.width < this.player.x || this,
+      player.x + this.player.width < this.x)
     ) {
       return false;
     }
@@ -231,6 +275,7 @@ class Obstacles {
   }
 }
 
+//FRIENDS
 class FriendlyObj {
   constructor() {
     this.images = [
@@ -257,6 +302,37 @@ class FriendlyObj {
     console.log("testObstcl");
     for (let i = 0; i < this.images.length; i++) {
       image(this.images[i].src, 0, 0, 200, 200);
+    }
+  }
+}
+
+//VEHICLES
+class Vehicles {
+  constructor() {
+    this.images = [
+      {
+        src: loadImage("Transportation/batmobile.png"),
+        x: 0,
+        y: 0,
+        speed: 1
+      },
+      {
+        src: loadImage("Transportation/bike.png"),
+        x: 0,
+        y: 0,
+        speed: 2
+      }
+    ];
+  }
+
+  setup() {
+    image(this.images[i].src, 0, 0, 200, 200);
+  }
+
+  draw() {
+    console.log("testTransport");
+    for (let i = 0; i < this.images.length; i++) {
+      image(this.images[i].src, width / 2, height - 200, 200, 200);
     }
   }
 }
