@@ -1,12 +1,39 @@
+class Game {
+  constructor() {
+    console.log("test");
+    this.obstacles = [];
+    this.friendlyObjects = [];
+  }
+
+  init() {
+    this.background = new Background();
+    this.player = new Player();
+    this.obstacles = new Obstacles();
+    this.friendlyObj = new FriendlyObj();
+  }
+  setup() {
+    //this.player.setup();
+    //this.background.setup();
+    //this.obstacles.setup();
+    // this.friendlyObj.draw();
+  }
+  draw() {
+    this.player.draw();
+    this.background.draw();
+    this.obstacles.draw();
+    this.friendlyObj.draw();
+  }
+}
+
+const game = new Game();
+
 function preload() {
-  console.log("PRELOAD");
+  console.log("preload");
   game.init();
 }
 
 function setup() {
-  // createCanvas(width, height)
   createCanvas(1920, 1080); // to match the bg images dimensions
-  stillImages = loadImage("Background/road flat.png");
   console.log("DRAW iMAGE");
   game.setup();
 }
@@ -15,65 +42,71 @@ function draw() {
   game.draw();
 }
 
+//BRACKGROUND SETUP///////////////////////////////////////////
 class Background {
   constructor() {
     this.imageCount = 0;
 
     this.images = [
       {
-        src: loadImage("Background/night sky.png"),
+        src: loadImage("Background/layer_0.png"),
         x: 0,
         y: 1080,
-        speed: 3
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_07_1920 x 1080.png"),
+        src: loadImage("Background/layer_07.png"),
         x: 0,
         y: 1080,
-        speed: 3
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_06_1920 x 1080.png"),
+        src: loadImage("Background/layer_06.png"),
         x: 0,
         y: 1080,
-        speed: 3
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_05_1920 x 1080.png"),
+        src: loadImage("Background/layer_05.png"),
         x: 0,
         y: 1080,
-        speed: 3
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_04_1920 x 1080.png"),
+        src: loadImage("Background/layer_04.png"),
         x: 0,
         y: 1080,
-        speed: 3
+        speed: 10
       },
 
       {
-        src: loadImage("Background/layer_03_1920 x 1080.png"),
+        src: loadImage("Background/layer_03.png"),
         x: 0,
         y: 1080,
-        speed: 4
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_02_1920 x 1080.png"),
+        src: loadImage("Background/layer_02.png"),
         x: 0,
         y: 1600,
-        speed: 5
+        speed: 10
       },
       {
-        src: loadImage("Background/layer_01_1920 x 1080.png"),
+        src: loadImage("Background/layer_01.png"),
         x: 0,
         y: 1080,
-        speed: 5
+        speed: 10
+      },
+      {
+        src: loadImage("Background/layer_00.png"),
+        x: 1920,
+        y: 1080,
+        speed: 10
       }
     ];
   }
 
-  //MOVE  THE LAYERS
-  move() {
+  move(pic) {
     // image(imageXY, x, y) //CheCk IF OK
     image(pic.src, 0, pic.y);
     image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
@@ -107,49 +140,56 @@ class Background {
   }
 }
 
-// class FriendlyObj {
-//   constructor() {
-//     this.width = 25;
-//     this.height = 25;
+class Player {
+  constructor() {
+    this.images = [
+      {
+        src: loadImage("DeliveryHeroes/baby_batman.png"),
+        x: 5,
+        y: 7,
+        speed: 5
+      },
+      {
+        src: loadImage("DeliveryHeroes/donaldduck_deliveryhero.png"),
+        x: 0,
+        y: 0,
+        speed: 2
+      },
+      {
+        src: loadImage("Hands/hand_yellow.png"),
+        x: 50,
+        y: 50,
+        speed: 1
+      }
+    ];
+  }
 
-//     this.images = [
-//       {
-//         //src: loadImage("flame_bottle.png"),
-//         x: 0,
-//         y: 0,
-//         speed: 1
-//       },
-//       {
-//         src: loadImage("flame_not royalty free.jpg"),
-//         x: 0,
-//         y: 0,
-//         speed: 2
-//       }
-//     ];
-//   }
-//   setup() {
-//     this.friendlyObj.setup();
-//   }
-//   draw() {
-//     this.friendlyObj.draw();
-//   }
-// }
-// const friendlyObj = new FriendlyObj();
+  setup() {
+    image(this.images[0].src, 0, 0, 200, 200);
+  }
+
+  draw() {
+    console.log("sth");
+    for (let i = 0; i < this.images.length; i++) {
+      image(this.images[i].src, 0, 0, 200, 200);
+    }
+  }
+
+  //   move() {
+  //     }
+}
 
 class Obstacles {
   constructor() {
-    this.width = 25;
-    this.height = 25;
-
     this.images = [
       {
-        src: loadImage("stop sign.png"),
+        src: loadImage("stopSign.png"),
         x: 0,
         y: 0,
         speed: 1
       },
       {
-        src: loadImage("traffic  light.png"),
+        src: loadImage("trafficLight.png"),
         x: 0,
         y: 0,
         speed: 2
@@ -158,14 +198,19 @@ class Obstacles {
     // this.x = width;
     // this.y = random(0, height - this.height);
     // random() is a p5 function that accepts a range
-    this.counter = 0;
   }
 
+  setup() {
+    image(this.images[i].src, 0, 0, 200, 200);
+  }
   draw() {
-    this.obstacles;
+    console.log("testObstcl");
+    for (let i = 0; i < this.images.length; i++) {
+      image(this.images[i].src, 0, 0, 200, 200);
+    }
   }
 
-  collides(friendlyObj) {
+  collides() {
     // check if obj collides with self
     // self completely to the left || self completely to the right
     if (
@@ -185,41 +230,33 @@ class Obstacles {
     return true;
   }
 }
-const obstacles = new Obstacles();
-class Player {
+
+class FriendlyObj {
   constructor() {
     this.images = [
       {
-        src: loadImage("Delivery Heroes/baby batman.png"),
+        src: loadImage("flame_bottle.png"),
         x: 0,
         y: 0,
-        speed: 5
+        speed: 1
       },
       {
-        src: loadImage("Delivery Heroes/donald duck_deliveryhero.png"),
+        src: loadImage("flame2.png"),
         x: 0,
         y: 0,
         speed: 2
-      },
-      {
-        src: loadImage("Hands/hand yellow.png"),
-        x: 50,
-        y: 50,
-        speed: 1
       }
     ];
   }
 
   setup() {
-    this.height = 50; //CHECK IF OK
-    this.width = 50;
+    image(this.images[i].src, 0, 0, 200, 200);
   }
 
   draw() {
-    this.player;
+    console.log("testObstcl");
+    for (let i = 0; i < this.images.length; i++) {
+      image(this.images[i].src, 0, 0, 200, 200);
+    }
   }
-
-  //   move() {
-  //     }
 }
-const player = new Player();

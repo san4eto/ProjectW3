@@ -17,6 +17,7 @@ function preload() {
 //SETUP THE CANVAS
 function setup() {
   createCanvas(width, height); //width & height of parallax  file
+  image(backgroundLayer[i], 0, 0);
 }
 
 //DRAW
