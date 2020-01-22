@@ -10,7 +10,10 @@ class Game {
     this.player = new Player();
     this.stopSign = new Obstacles();
     this.trafficLight = new Obstacles();
-    this.friendlyObj = new FriendlyObj();
+    this.friendlyObjects.push(
+      new FriendlyObj("flame"),
+      new FriendlyObj("bottle")
+    );
     this.vehicles = new Vehicles();
   }
   setup() {
@@ -24,7 +27,9 @@ class Game {
     this.player.draw();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
-    this.friendlyObj.draw();
+    this.friendlyObjects.forEach(function(obj) {
+      obj.draw();
+    });
     this.vehicles.draw();
     //this.stopSign.moveDown();
     moveObjects();
@@ -46,8 +51,13 @@ function keyPressed() {
 }
 
 function moveObjects() {
-  game.stopSign.moveDown();
-  game.trafficLight.moveDown();
+  if (keyCode == 32) {
+    game.stopSign.moveDown();
+    game.trafficLight.moveDown();
+    game.friendlyObjects.forEach(function(obj) {
+      obj.moveDown();
+    });
+  }
 }
 
 function preload() {
@@ -246,7 +256,7 @@ class Obstacles {
   moveDown() {
     this.ylocation += 2;
     this.xlocation = this.xlocation + random(-3, 3);
-    if (this.ylocation < 0) {
+    if (this.ylocation > 1080) {
       this.ylocation = this.ylocation;
     }
   }
@@ -274,46 +284,69 @@ class Obstacles {
 
 //FRIENDS
 class FriendlyObj {
-  constructor() {
-    this.images = [
-      {
-        src: loadImage("flame_bottle.png"),
-        x: 0,
-        y: 0,
-        speed: 1
-      },
-      {
+  constructor(type) {
+    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
+
+    if (type == "flame") {
+      this.image = {
         src: loadImage("flame2.png"),
         x: 0,
         y: 0,
-        speed: 2
-      }
-    ];
-  }
-
-  setup() {
-    image(this.images[i].src, 0, 0, 200, 200);
+        speed: 5
+      };
+    } else if (type == "bottle") {
+      this.image = {
+        src: loadImage("flame_bottle.png"),
+        x: 0,
+        y: 0,
+        speed: 7
+      };
+    }
   }
 
   moveDown() {
-    this.y += 20;
+    this.ylocation += this.image.speed;
+    this.xlocation = this.xlocation + random(-3, 3);
+    if (this.ylocation > 1080) {
+      this.ylocation = this.ylocation;
+    }
+    //   if (
+    //     (this.xlocation + this.width < this.player.x || this,
+    //     player.x + this.player.width < this.xlocation)
+    //   ) {
+    //     return false;
+    //   }
+    //   // self completely to the top || self completely to the bottom
+    //   if (
+    //     this.ylocation + this.height < this.player.y ||
+    //     this.player.y + this.player.height < this.ylocation
+    //   ) {
+    //     return false;
+    //   }
   }
 
-  moveUp() {
-    this.y -= 20;
-  }
-  moveLeft() {
-    this.x -= 20;
-  }
-  moveRight() {
-    this.x += 20;
-  }
+  //   collides() {
+  //     // check if obj collides with self
+  //     // self completely to the left || self completely to the right
+  //     if (
+  //       (this.xlocation + this.width < this.player.x || this,
+  //       player.x + this.player.width < this.xlocation)
+  //     ) {
+  //       return false;
+  //     }
+  //     // self completely to the top || self completely to the bottom
+  //     if (
+  //       this.ylocation + this.height < this.player.y ||
+  //       this.player.y + this.player.height < this.ylocation
+  //     ) {
+  //       return false;
+  //     }
+  //   }
 
   draw() {
     //console.log("testObstcl");
-    for (let i = 0; i < this.images.length; i++) {
-      image(this.images[i].src, 0, 0, 200, 200);
-    }
+    image(this.image.src, this.xlocation, this.ylocation, 200, 200);
   }
 }
 
