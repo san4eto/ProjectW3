@@ -49,7 +49,7 @@ class Background {
     image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
 
     if (pic.y > 0) {
-      console.log("fhfh");
+      //console.log("fhfh");
       pic.y -= pic.speed; //make it stop at the top and load next one
     }
   }
@@ -65,7 +65,7 @@ class Background {
     for (let i = 0; i <= this.imageCount; i++) {
       //this.imageCount
       this.move(this.images[i]);
-      console.log("test");
+      //console.log("test");
     }
   }
 }
