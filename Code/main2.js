@@ -25,7 +25,7 @@ class Game {
     // this.friendlyObj.draw();
   }
   draw() {
-    this.background.draw();
+    // this.background.draw();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
     this.friendlyObjects.forEach(function(obj) {
@@ -76,21 +76,6 @@ class Game {
 }
 const game = new Game();
 
-let counter = 0;
-let levelDifficulty = [600, 400, 300, 200];
-function setup() {
-  let timer = select("h1");
-  timer.html("0"); //insert text
-
-  function timeIt() {
-    counter++;
-    timer.html(counter);
-  }
-
-  setInterval(timeIt, frameRate / levelDifficulty[0]); //native function 1000ms =1 s
-  //request animationframe is also another func
-}
-
 function keyPressed() {
   if (keyCode === 37) {
     game.manyPlayers.forEach(function(obj) {
@@ -127,13 +112,22 @@ function preload() {
   game.init();
 }
 
+let yCanvas = 0;
 function setup() {
-  createCanvas(1920, 1080); // to match the bg images dimensions
+  createCanvas(1920, 1080);
+  road = loadImage("Background/layer_00.png"); // to match the bg images dimensions
+  sky = loadImage("Background/layer_0.png");
   console.log("DRAW iMAGE");
   game.setup();
 }
 
 function draw() {
+  yCanvas = yCanvas - 0.15;
+  if (yCanvas > height) {
+    yCanvas = 0;
+  }
+  image(sky, 0, yCanvas);
+  image(road, 0, 500);
   game.draw();
 }
 
@@ -143,18 +137,6 @@ class Background {
     this.imageCount = 0;
 
     this.images = [
-      {
-        src: loadImage("Background/layer_00.png"),
-        x: 1920,
-        y: 1080,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_0.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
       {
         src: loadImage("Background/layer_07.png"),
         x: 0,
