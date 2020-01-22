@@ -26,6 +26,8 @@ class Game {
     this.trafficLight.drawTraffic();
     this.friendlyObj.draw();
     this.vehicles.draw();
+    //this.stopSign.moveDown();
+    moveObjects();
   }
 }
 const game = new Game();
@@ -41,6 +43,11 @@ function keyPressed() {
   } else if (keyCode === 40) {
     game.player.moveDown();
   }
+}
+
+function moveObjects() {
+  game.stopSign.moveDown();
+  game.trafficLight.moveDown();
 }
 
 function preload() {
@@ -192,7 +199,7 @@ class Player {
   setup() {
     //image(this.images[0].src, this.x, this.y, 200, 200);
   }
-
+  //MOVE/////////////////////////////////////
   moveDown() {
     this.y += 200;
   }
@@ -237,17 +244,11 @@ class Obstacles {
   }
 
   moveDown() {
-    this.y += 20;
-  }
-
-  moveUp() {
-    this.y -= 20;
-  }
-  moveLeft() {
-    this.x -= 20;
-  }
-  moveRight() {
-    this.x += 20;
+    this.ylocation += 2;
+    this.xlocation = this.xlocation + random(-3, 3);
+    if (this.ylocation < 0) {
+      this.ylocation = this.ylocation;
+    }
   }
 
   collides() {
@@ -292,6 +293,20 @@ class FriendlyObj {
 
   setup() {
     image(this.images[i].src, 0, 0, 200, 200);
+  }
+
+  moveDown() {
+    this.y += 20;
+  }
+
+  moveUp() {
+    this.y -= 20;
+  }
+  moveLeft() {
+    this.x -= 20;
+  }
+  moveRight() {
+    this.x += 20;
   }
 
   draw() {
