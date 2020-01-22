@@ -31,13 +31,13 @@ class Game {
 
 function keyPressed() {
   if (keyCode === 37) {
-    this.stopSign.moveLeft();
-  } else if (keyCode === 39) {
-    this.x += 20;
-  } else if (keyCode === 40) {
-    this.y += 20;
+    this.player.moveLeft();
   } else if (keyCode === 38) {
-    this.y -= 20;
+    this.player.moveUp();
+  } else if (keyCode === 39) {
+    this.player.moveRight();
+  } else if (keyCode === 40) {
+    this.player.moveDown();
   }
 }
 
@@ -160,6 +160,7 @@ class Player {
   constructor() {
     this.y = height;
     this.x = width / 2;
+    this.babyBatman = loadImage("DeliveryHeroes/baby_batman.png");
     this.images = [
       {
         src: loadImage("DeliveryHeroes/baby_batman.png"),
@@ -193,7 +194,7 @@ class Player {
   }
 
   moveDown() {
-    if (keyPressed(40)) {
+    if (keyPressed == 40) {
       console.log("down");
       {
         this.y += 20;
@@ -201,7 +202,7 @@ class Player {
     }
   }
   moveUp() {
-    if (keyPressed(38)) {
+    if (keyPressed == 38) {
       console.log("up");
       {
         this.y -= 20;
@@ -212,12 +213,12 @@ class Player {
     if (keyPressed == 37) {
       console.log("left");
       {
-        this.x -= 200;
+        this.x -= 20;
       }
     }
   }
   moveRight() {
-    if (keyPressed(39)) {
+    if (keyPressed == 39) {
       console.log("right");
       {
         this.x += 20;
@@ -227,10 +228,10 @@ class Player {
 
   draw() {
     console.log("sth");
-
-    for (let i = 0; i < this.images.length; i++) {
-      image(this.images[i].src, width / 2 - 200, height - 200, 200, 200);
-    }
+    image(this.images[0].src, width / 2 - 200, height - 200, 200, 200);
+    // for (let i = 0; i < this.images.length; i++) {
+    //   image(this.images[i].src, width / 2 - 200, height - 200, 200, 200);
+    // }
   }
 }
 
@@ -240,7 +241,6 @@ class Obstacles {
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
     this.stopSign = loadImage("stopSign.png");
-
     this.trafficLight = loadImage("trafficLight.png");
   }
 
@@ -326,13 +326,14 @@ class Vehicles {
   }
 
   setup() {
-    image(this.images[i].src, 0, 0, 200, 200);
+    //change if we work with multiple obj
+    image(this.images[0].src, 0, 0, 200, 200);
   }
 
   draw() {
     console.log("testTransport");
-    for (let i = 0; i < this.images.length; i++) {
-      image(this.images[i].src, width / 2, height - 200, 200, 200);
-    }
+    /*for (let i = 0; i < this.images.length; i++) {*/
+    image(this.images[0].src, width / 2, height - 200, 200, 200);
+    //}
   }
 }
