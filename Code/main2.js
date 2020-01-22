@@ -8,15 +8,15 @@ class Game {
 
   init() {
     this.background = new Background();
-    //this.player = new Player();
     this.stopSign = new Obstacles();
     this.trafficLight = new Obstacles();
     this.manyPlayers.push(new Player("powerPuff"));
+
     this.friendlyObjects.push(
       new FriendlyObj("flame"),
       new FriendlyObj("bottle")
     );
-    this.vehicles = new Vehicles();
+    //this.vehicles = new Vehicles();
   }
   setup() {
     //this.player.setup();
@@ -26,10 +26,8 @@ class Game {
   }
   draw() {
     this.background.draw();
-    //this.player.draw();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
-    //random(this.manyPlayers)).draw;
     this.friendlyObjects.forEach(function(obj) {
       obj.draw();
     });
@@ -37,12 +35,61 @@ class Game {
       obj.draw();
     });
 
-    this.vehicles.draw();
-    //this.stopSign.moveDown();
     moveObjects();
+
+    this.manyPlayers.forEach(player => {
+      this.stopSign.collides(player);
+    });
+
+    this.manyPlayers.forEach(player => {
+      this.trafficLight.collides(player);
+    });
+
+    // this.manyPlayers.forEach(player => {
+    //   this.friendlyObjects.forEach.collides(player);
+    // });
+
+    //this.vehicles.draw();
+
+    //////////
+    // if (frameCount % 1200 === 0) {
+    //   this.friendlyObj.push(new FriendlyObj());
+    // }
+
+    // this.friendlyObjects = this.friendlyObjects.filter(
+    //   function() {
+    //     if (
+    //       !friendlyObj.collides(this.player) &&
+    //       friendlyObj.xlocation + friendlyObj.width >= 0
+    //     ) {
+    //       return true;
+    //     }
+    //   }.bind(this)
+    // );
+
+    // this.obstacles.forEach(function(obstacle) {
+    //   obstacle.draw();
+    // });
+
+    /////////
   }
 }
 const game = new Game();
+
+let counter = 0;
+let levelDifficulty = [600, 400, 300, 200];
+function setup() {
+  let timer = select("h1");
+  timer.html("0"); //insert text
+
+  function timeIt() {
+    counter++;
+    timer.html(counter);
+  }
+
+  setInterval(timeIt, frameRate / levelDifficulty[0]); //native function 1000ms =1 s
+  //request animationframe is also another func
+}
 
 function keyPressed() {
   if (keyCode === 37) {
@@ -97,6 +144,12 @@ class Background {
 
     this.images = [
       {
+        src: loadImage("Background/layer_00.png"),
+        x: 1920,
+        y: 1080,
+        speed: 10
+      },
+      {
         src: loadImage("Background/layer_0.png"),
         x: 0,
         y: 1080,
@@ -144,12 +197,6 @@ class Background {
         x: 0,
         y: 1080,
         speed: 10
-      },
-      {
-        src: loadImage("Background/layer_00.png"),
-        x: 1920,
-        y: 1080,
-        speed: 10
       }
     ];
   }
@@ -190,8 +237,10 @@ class Background {
 
 class Player {
   constructor(type) {
-    this.x = 900;
-    this.y = 960;
+    this.xlocation = 900; //width - this.width;
+    this.ylocation = 900; //height - this.height;
+    this.width = 200;
+    this.height = 200;
 
     if (type == "powerPuff") {
       this.image = {
@@ -219,27 +268,53 @@ class Player {
 
   //MOVE/////////////////////////////////////
   moveDown() {
-    this.y += 100 + this.image.speed;
+    this.ylocation += 100 + this.image.speed;
   }
 
   moveUp() {
-    this.y -= 100 + this.image.speed;
+    this.ylocation -= 100 + this.image.speed;
   }
   moveLeft() {
-    this.x -= 100 + this.image.speed;
+    this.xlocation -= 100 + this.image.speed;
   }
   moveRight() {
-    this.x += 200 + this.image.speed;
+    this.xlocation += 200 + this.image.speed;
   }
 
   draw() {
-    image(this.image.src, this.x, this.y, 200, 200);
+    image(
+      this.image.src,
+      this.xlocation,
+      this.ylocation,
+      this.width,
+      this.height
+    );
   }
+
+  //   collides() {
+  //     // check if obj collides with self
+  //     // self completely to the left || self completely to the right
+  //     if (
+  //       (this.xlocation + this.width < this.player.x || this,
+  //       player.x + this.player.width < this.xlocation)
+  //     ) {
+  //       return false;
+  //     }
+  //     // self completely to the top || self completely to the bottom
+  //     if (
+  //       this.ylocation + this.height < this.player.y ||
+  //       this.player.y + this.player.height < this.ylocation
+  //     ) {
+  //       return false;
+  //     }
+  //   }
 }
 
 //OBSTACLES
 class Obstacles {
   constructor() {
+    this.width = 70;
+    this.height = 70;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
     this.stopSign = loadImage("stopSign.png");
@@ -249,11 +324,23 @@ class Obstacles {
   setup() {}
   drawTraffic() {
     // console.log("testObstcl");
-    image(this.trafficLight, this.xlocation, this.ylocation, 200, 200);
+    image(
+      this.trafficLight,
+      this.xlocation,
+      this.ylocation,
+      this.width,
+      this.height
+    );
   }
 
   drawStopSign() {
-    image(this.stopSign, this.xlocation, this.ylocation, 200, 200);
+    image(
+      this.stopSign,
+      this.xlocation,
+      this.ylocation,
+      this.width,
+      this.height
+    );
   }
 
   moveDown() {
@@ -267,23 +354,26 @@ class Obstacles {
     }
   }
 
-  collides() {
+  collides(player) {
     // check if obj collides with self
     // self completely to the left || self completely to the right
     if (
-      (this.x + this.width < this.player.x || this,
-      player.x + this.player.width < this.x)
+      this.xlocation + this.width < player.xlocation ||
+      player.xlocation + player.width < this.xlocation
     ) {
       return false;
     }
     // self completely to the top || self completely to the bottom
-    if (this.y + this.height < obj.y || obj.y + obj.height < this.y) {
+    if (
+      this.ylocation + this.height < player.ylocation ||
+      player.ylocation + player.height < this.ylocation
+    ) {
       return false;
     }
 
-    // collision detected -> we can play the sound
+    console.log("collision detected -> we can play the sound");
     //game.coinSound.play();
-
+    counter += 1;
     return true;
   }
 }
@@ -291,8 +381,10 @@ class Obstacles {
 //FRIENDS
 class FriendlyObj {
   constructor(type) {
+    this.height = 100;
+    this.width = 100;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
-    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
+    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100 - this.height;
 
     if (type == "flame") {
       this.image = {
@@ -321,26 +413,36 @@ class FriendlyObj {
     }
   }
 
-  //   collides() {
-  //     // check if obj collides with self
-  //     // self completely to the left || self completely to the right
-  //     if (
-  //       (this.xlocation + this.width < this.player.x || this,
-  //       player.x + this.player.width < this.xlocation)
-  //     ) {
-  //       return false;
-  //     }
-  //     // self completely to the top || self completely to the bottom
-  //     if (
-  //       this.ylocation + this.height < this.player.y ||
-  //       this.player.y + this.player.height < this.ylocation
-  //     ) {
-  //       return false;
-  //     }
-  //   }
-
   draw() {
-    image(this.image.src, this.xlocation, this.ylocation, 200, 200);
+    image(
+      this.image.src,
+      this.xlocation,
+      this.ylocation,
+      this.width,
+      this.height
+    );
+  }
+  collides(obj) {
+    // check if obj collides with self
+    // self completely to the left || self completely to the right
+    if (
+      this.xlocation + this.width < obj.xlocation ||
+      obj.xlocation + obj.width < this.xlocation
+    ) {
+      return false;
+    }
+    // self completely to the top || self completely to the bottom
+    if (
+      this.ylocation + this.height < obj.ylocation ||
+      obj.ylocation + obj.height < this.ylocation
+    ) {
+      return false;
+    }
+
+    // collision detected -> we can play the sound
+    game.coinSound.play();
+
+    return true;
   }
 }
 
