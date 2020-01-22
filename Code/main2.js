@@ -3,13 +3,15 @@ class Game {
     //console.log("test");
     this.obstacles = [];
     this.friendlyObjects = [];
+    this.manyPlayers = [];
   }
 
   init() {
     this.background = new Background();
-    this.player = new Player();
+    //this.player = new Player();
     this.stopSign = new Obstacles();
     this.trafficLight = new Obstacles();
+    this.manyPlayers.push(new Player("powerPuff"));
     this.friendlyObjects.push(
       new FriendlyObj("flame"),
       new FriendlyObj("bottle")
@@ -24,12 +26,17 @@ class Game {
   }
   draw() {
     this.background.draw();
-    this.player.draw();
+    //this.player.draw();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
+    //random(this.manyPlayers)).draw;
     this.friendlyObjects.forEach(function(obj) {
       obj.draw();
     });
+    this.manyPlayers.forEach(function(obj) {
+      obj.draw();
+    });
+
     this.vehicles.draw();
     //this.stopSign.moveDown();
     moveObjects();
@@ -39,19 +46,27 @@ const game = new Game();
 
 function keyPressed() {
   if (keyCode === 37) {
-    game.player.moveLeft();
+    game.manyPlayers.forEach(function(obj) {
+      obj.moveLeft();
+    });
     console.log("left");
   } else if (keyCode === 38) {
-    game.player.moveUp();
+    game.manyPlayers.forEach(function(obj) {
+      obj.moveUp();
+    });
   } else if (keyCode === 39) {
-    game.player.moveRight();
+    game.manyPlayers.forEach(function(obj) {
+      obj.moveRight();
+    });
   } else if (keyCode === 40) {
-    game.player.moveDown();
+    game.manyPlayers.forEach(function(obj) {
+      obj.moveDown();
+    });
   }
 }
 
 function moveObjects() {
-  if (keyCode == 32) {
+  if (keyCode >= 32) {
     game.stopSign.moveDown();
     game.trafficLight.moveDown();
     game.friendlyObjects.forEach(function(obj) {
@@ -174,63 +189,51 @@ class Background {
 }
 
 class Player {
-  constructor() {
-    this.y = 900; // FIX THAT
-    this.x = 960; //width / 2;
-    this.babyBatman = loadImage("DeliveryHeroes/baby_batman.png");
-    this.images = [
-      {
-        src: loadImage("DeliveryHeroes/baby_batman.png"),
-        x: 5,
-        y: 7,
-        speed: 5
-      },
-      {
-        src: loadImage("DeliveryHeroes/donaldduck_deliveryhero.png"),
+  constructor(type) {
+    this.x = 900;
+    this.y = 960;
+
+    if (type == "powerPuff") {
+      this.image = {
+        src: loadImage("DeliveryHeroes/bubblesPowerpuff.png"),
         x: 0,
         y: 0,
-        speed: 2
-      },
-      {
-        src: loadImage("Hands/hand_yellow.png"),
-        x: 50,
-        y: 50,
-        speed: 1
-      },
-      {
-        src: loadImage("DeliveryHeroes/bubblesPowerpuff.png"),
-        x: 50,
-        y: 50,
-        speed: 1
-      }
-    ];
+        speed: 15
+      };
+    } else if (type == "batman") {
+      this.image = {
+        src: loadImage("DeliveryHeroes/baby_batman.png"),
+        x: 0,
+        y: 0,
+        speed: 7
+      };
+    } else if (type == "runner") {
+      this.image = {
+        src: loadImage("DeliveryHeroes/road_runner2.png"),
+        x: 0,
+        y: 0,
+        speed: 10
+      };
+    }
   }
 
-  setup() {
-    //image(this.images[0].src, this.x, this.y, 200, 200);
-  }
   //MOVE/////////////////////////////////////
   moveDown() {
-    this.y += 200;
+    this.y += 100 + this.image.speed;
   }
 
   moveUp() {
-    this.y -= 200;
+    this.y -= 100 + this.image.speed;
   }
   moveLeft() {
-    this.x -= 200;
+    this.x -= 100 + this.image.speed;
   }
   moveRight() {
-    this.x += 200;
+    this.x += 200 + this.image.speed;
   }
 
   draw() {
-    //console.log("sth");
-    image(this.images[0].src, this.x, this.y, 200, 200);
-
-    // for (let i = 0; i < this.images.length; i++) {
-    //   image(this.images[i].src, width / 2 - 200, height - 200, 200, 200);
-    // }
+    image(this.image.src, this.x, this.y, 200, 200);
   }
 }
 
@@ -254,8 +257,11 @@ class Obstacles {
   }
 
   moveDown() {
-    this.ylocation += 2;
-    this.xlocation = this.xlocation + random(-3, 3);
+    if (keyCode >= 32) {
+      this.ylocation += 2;
+      this.xlocation = this.xlocation + random(-3, 3);
+    }
+
     if (this.ylocation > 1080) {
       this.ylocation = this.ylocation;
     }
@@ -306,24 +312,13 @@ class FriendlyObj {
   }
 
   moveDown() {
-    this.ylocation += this.image.speed;
-    this.xlocation = this.xlocation + random(-3, 3);
+    if (keyCode >= 32) {
+      this.ylocation += this.image.speed;
+      this.xlocation = this.xlocation + random(-3, 3);
+    }
     if (this.ylocation > 1080) {
       this.ylocation = this.ylocation;
     }
-    //   if (
-    //     (this.xlocation + this.width < this.player.x || this,
-    //     player.x + this.player.width < this.xlocation)
-    //   ) {
-    //     return false;
-    //   }
-    //   // self completely to the top || self completely to the bottom
-    //   if (
-    //     this.ylocation + this.height < this.player.y ||
-    //     this.player.y + this.player.height < this.ylocation
-    //   ) {
-    //     return false;
-    //   }
   }
 
   //   collides() {
@@ -345,7 +340,6 @@ class FriendlyObj {
   //   }
 
   draw() {
-    //console.log("testObstcl");
     image(this.image.src, this.xlocation, this.ylocation, 200, 200);
   }
 }
