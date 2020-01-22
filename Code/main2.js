@@ -25,7 +25,7 @@ class Game {
     // this.friendlyObj.draw();
   }
   draw() {
-    // this.background.draw();
+    //this.background.draw();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
     this.friendlyObjects.forEach(function(obj) {
@@ -109,112 +109,154 @@ function moveObjects() {
 
 function preload() {
   console.log("preload");
+  sky = loadImage("Background/layer_0.png");
+  road = loadImage("Background/layer_00.png"); // to match the bg images dimensions
+
+  layer0 = loadImage("Background/layer_07.png");
+  layer1 = loadImage("Background/layer_06.png");
+  layer2 = loadImage("Background/layer_05.png");
+  layer3 = loadImage("Background/layer_04.png");
+  layer4 = loadImage("Background/layer_03.png");
+  layer5 = loadImage("Background/layer_02.png");
+  layer6 = loadImage("Background/layer_01.png");
   game.init();
 }
-
+let buildingsImg = 650;
 let yCanvas = 0;
+let roadDirection = 500;
 function setup() {
   createCanvas(1920, 1080);
-  road = loadImage("Background/layer_00.png"); // to match the bg images dimensions
-  sky = loadImage("Background/layer_0.png");
-  console.log("DRAW iMAGE");
+
   game.setup();
 }
 
 function draw() {
-  yCanvas = yCanvas - 0.15;
-  if (yCanvas > height) {
-    yCanvas = 0;
+  roadDirection = roadDirection + 0.1;
+  if (roadDirection > 1100) {
+    roadDirection = 1100;
+  }
+  //   yCanvas = 0;
+  // }
+  yCanvas = yCanvas - 0.25;
+  // if (yCanvas < -yCanvas) {
+  //   yCanvas = 0;
+  // }
+  buildingsImg = buildingsImg - 0.1;
+  if (buildingsImg < 0) {
+    buildingsImg = 0;
   }
   image(sky, 0, yCanvas);
-  image(road, 0, 500);
+  image(layer0, 0, yCanvas);
+  image(layer1, 0, buildingsImg);
+  image(layer2, 0, buildingsImg);
+  image(layer3, 0, buildingsImg);
+  image(layer4, 0, buildingsImg);
+  image(layer5, 0, buildingsImg);
+  image(layer6, 0, buildingsImg);
+  image(road, 0, roadDirection);
+
   game.draw();
 }
 
 //BRACKGROUND SETUP///////////////////////////////////////////
 class Background {
   constructor() {
+    this.yBackgr = height;
     this.imageCount = 0;
+    this.layer1 = loadImage("Background/layer_0.png");
+    // this.images = [
+    //   {
+    //     src: loadImage("Background/layer_07.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   },
+    //   {
+    //     src: loadImage("Background/layer_06.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   },
+    //   {
+    //     src: loadImage("Background/layer_05.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   },
+    //   {
+    //     src: loadImage("Background/layer_04.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   },
 
-    this.images = [
-      {
-        src: loadImage("Background/layer_07.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_06.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_05.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_04.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
-
-      {
-        src: loadImage("Background/layer_03.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_02.png"),
-        x: 0,
-        y: 1600,
-        speed: 10
-      },
-      {
-        src: loadImage("Background/layer_01.png"),
-        x: 0,
-        y: 1080,
-        speed: 10
-      }
-    ];
+    //   {
+    //     src: loadImage("Background/layer_03.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   },
+    //   {
+    //     src: loadImage("Background/layer_02.png"),
+    //     x: 0,
+    //     y: 1600,
+    //     speed: 10
+    //   },
+    //   {
+    //     src: loadImage("Background/layer_01.png"),
+    //     x: 0,
+    //     y: 1080,
+    //     speed: 10
+    //   }
+    // ];
   }
-
-  move(pic) {
-    // image(imageXY, x, y) //CheCk IF OK
-    image(pic.src, 0, pic.y);
-    image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
-
-    if (pic.y > 0) {
-      //console.log("fhfh");
-      pic.y -= pic.speed; //make it stop at the top and load next one
-    }
-  }
+  // move() {
+  //   this.yBackgr = yBackgr - 2;
+  //   //   if (this.yBackgr > height) {
+  //   //     this.yBackgr = 0;
+  //   //   }
+  // }
 
   draw() {
-    //image(stillImage, 1000, 1000, 1000, 1000);
-    //background(stillImage);
-    // const c = color(255, 204, 0);
-    // background(c);
-    //make it stop at the top and load next one
-    // for (let i = 0; i < this.images.length; i++) {
-    //   //for (let i = 0; i < 5; i++) {
-    //   this.move(this.images[i]);
-    // }
-    if (frameCount % 240 === 0) {
-      this.imageCount += 1;
-      if (this.imageCount >= this.images.length) {
-        this.imageCount = this.images.length - 1; //
-      }
+    this.yBackgr = this.yBackgr - 1;
+    if (this.yBackgr > height) {
+      this.yBackgr = 1080;
     }
-    for (let i = 0; i <= this.imageCount; i++) {
-      //this.imageCount
-      this.move(this.images[i]);
-    }
+    image(this.layer1, 0, this.yBackgr);
+    console.log("backgr");
+
+    // move(pic) {
+    //   // image(imageXY, x, y) //CheCk IF OK
+    //   image(pic.src, 0, pic.y);
+    //   image(pic.src, 0, pic.y - pic.height / 2); // move in  from  half of the canvas
+
+    //   if (pic.y > 0) {
+    //     //console.log("fhfh");
+    //     pic.y -= pic.speed; //make it stop at the top and load next one
+    //   }
   }
+
+  // draw() {
+  //   //image(stillImage, 1000, 1000, 1000, 1000);
+  //   //background(stillImage);
+  //   // const c = color(255, 204, 0);
+  //   // background(c);
+  //   //make it stop at the top and load next one
+  //   // for (let i = 0; i < this.images.length; i++) {
+  //   //   //for (let i = 0; i < 5; i++) {
+  //   //   this.move(this.images[i]);
+  //   // }
+  //   if (frameCount % 240 === 0) {
+  //     this.imageCount += 1;
+  //     if (this.imageCount >= this.images.length) {
+  //       this.imageCount = this.images.length - 1; //
+  //     }
+  //   }
+  //   for (let i = 0; i <= this.imageCount; i++) {
+  //     //this.imageCount
+  //     this.move(this.images[i]);
+  //   }
+  // }
 }
 
 class Player {
