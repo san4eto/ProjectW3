@@ -56,17 +56,22 @@ class Game {
     textAlign(CENTER, CENTER);
     textSize(60);
     textFont("Quantico-BoldItalic");
-    text("Time left: " + timer.toFixed(2), 1650, 100);
+    text("Time left: " + timer + "sec", 1650, 100);
     // textfont(Helvetica);
     fill(255, 255, 255);
     if (frameCount % frameCountdivider == 0 && timer > 0) {
       // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
       timer--;
     }
+    if (Math.floor(timer) == 90) {
+      textSize(90);
+      fill(245, 197, 66);
+      text("Press any key to start the GAME", width / 2, height * 0.7);
+    }
     if (Math.floor(timer) == 30) {
       textSize(90);
+      fill(245, 197, 66);
       text("HURRY UP!", width / 2, height * 0.7);
-      timer--;
     }
     if (timer <= 0 && score > 0) {
       textSize(120);
@@ -75,8 +80,10 @@ class Game {
     }
     if (timer <= 0 && score == 0) {
       textSize(120);
+      fill(245, 66, 66);
       text("GAME OVER", width / 2, height * 0.7);
       text("Sorry you ran out of time :( " + score, width / 2, height * 0.9);
+      ext("You have " + score + "points", width / 2, height * 0.9);
     }
     textSize(60);
     text("Score: " + score, 1645, 160);
@@ -305,17 +312,25 @@ class Player {
 
   //MOVE/////////////////////////////////////
   moveDown() {
-    this.ylocation += 100 + this.image.speed;
+    if (this.ylocation < 800) {
+      this.ylocation += 100 + this.image.speed;
+    }
   }
 
   moveUp() {
-    this.ylocation -= 100 + this.image.speed;
+    if (this.ylocation > 650) {
+      this.ylocation -= 100 + this.image.speed;
+    }
   }
   moveLeft() {
-    this.xlocation -= 100 + this.image.speed;
+    if (this.xlocation > 0 || this.xlocation > 1080) {
+      this.xlocation -= 100 + this.image.speed;
+    }
   }
   moveRight() {
-    this.xlocation += 200 + this.image.speed;
+    if (this.xlocation > 0 || this.xlocation > 1080) {
+      this.xlocation += 200 + this.image.speed;
+    }
   }
 
   draw() {
@@ -419,7 +434,7 @@ class Obstacles {
     }
 
     //game.coinSound.play();
-    timer -= 0.1;
+    timer--;
 
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
@@ -500,7 +515,7 @@ class FriendlyObj {
     //collision detected -> we can play the sound
     //game.coinSound.play();
     //frameCountdivider += 0.02;
-    timer += 0.1;
+    timer++;
     score++;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
