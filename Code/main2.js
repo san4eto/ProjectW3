@@ -26,6 +26,7 @@ class Game {
   }
   draw() {
     //this.background.draw();
+
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
     this.friendlyObjects.forEach(function(obj) {
@@ -53,20 +54,32 @@ class Game {
     });
 
     textAlign(CENTER, CENTER);
-    textSize(70);
+    textSize(60);
     textFont("Quantico-BoldItalic");
-    text(timer.toFixed(2), 1800, 100);
+    text("Time left: " + timer.toFixed(2), 1650, 100);
     // textfont(Helvetica);
     fill(255, 255, 255);
     if (frameCount % frameCountdivider == 0 && timer > 0) {
       // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
       timer--;
     }
-    if (timer > 0) {
-    } else {
-      timer = 0;
-      text("GAME OVER", width / 2, height * 0.7);
+    if (Math.floor(timer) == 30) {
+      textSize(90);
+      text("HURRY UP!", width / 2, height * 0.7);
+      timer--;
     }
+    if (timer <= 0 && score > 0) {
+      textSize(120);
+      text("GAME OVER", width / 2, height * 0.7);
+      text("Congratulations your score is: " + score, width / 2, height * 0.9);
+    }
+    if (timer <= 0 && score == 0) {
+      textSize(120);
+      text("GAME OVER", width / 2, height * 0.7);
+      text("Sorry you ran out of time :( " + score, width / 2, height * 0.9);
+    }
+    textSize(60);
+    text("Score: " + score, 1645, 160);
   }
 }
 const game = new Game();
@@ -123,7 +136,8 @@ let frameCountdivider = 60;
 let yCanvas = 0;
 let buildingsImg = 650;
 let roadDirection = 500;
-let timer = 60;
+let timer = 90;
+let score = 0;
 function setup() {
   createCanvas(1920, 1080);
 
@@ -406,6 +420,7 @@ class Obstacles {
 
     //game.coinSound.play();
     timer -= 0.1;
+
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
 
@@ -486,6 +501,7 @@ class FriendlyObj {
     //game.coinSound.play();
     //frameCountdivider += 0.02;
     timer += 0.1;
+    score++;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     return true;
