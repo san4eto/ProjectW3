@@ -48,17 +48,16 @@ class Game {
     this.manyPlayers.forEach(player => {
       this.friendlyObjects.forEach(friendlyObj => {
         if (friendlyObj.collides(player)) {
-          friendlyObj.ylocation = -100;
-          timer += 1;
         }
       });
     });
 
     textAlign(CENTER, CENTER);
     textSize(70);
+    textFont("Quantico-BoldItalic");
     text(timer.toFixed(2), 1800, 100);
     // textfont(Helvetica);
-    fill(250, 222, 7);
+    fill(255, 255, 255);
     if (frameCount % frameCountdivider == 0 && timer > 0) {
       // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
       timer--;
@@ -105,6 +104,9 @@ function moveObjects() {
 
 function preload() {
   console.log("preload");
+  myFont = loadFont("ConcertOne-Regular.ttf");
+  myFont2 = loadFont("Quantico-BoldItalic.ttf");
+  myFont3 = loadFont("ConcertOne-Regular.ttf");
   sky = loadImage("Background/layer_0.png");
   road = loadImage("Background/layer_00.png"); // to match the bg images dimensions
   layer7 = loadImage("Background/layer_07.png");
@@ -417,7 +419,7 @@ class FriendlyObj {
     this.height = 100;
     this.width = 100;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
-    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100 - this.height;
+    this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100 - this.height);
 
     if (type == "flame") {
       this.image = {
@@ -454,6 +456,13 @@ class FriendlyObj {
       this.width,
       this.height
     );
+    this.pushUp();
+  }
+  pushUp() {
+    if (this.ylocation > height) {
+      this.xlocation = Math.floor(Math.random() * 10) * 100;
+      this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
+    }
   }
   collides(obj) {
     // check if obj collides with self
@@ -477,7 +486,8 @@ class FriendlyObj {
     //game.coinSound.play();
     //frameCountdivider += 0.02;
     timer += 0.1;
-
+    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     return true;
   }
 }
