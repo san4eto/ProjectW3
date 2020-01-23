@@ -10,11 +10,15 @@ class Game {
     // this.background = new Background();
     this.stopSign = new Obstacles();
     this.trafficLight = new Obstacles();
+    this.grandma = new Obstacles();
     this.manyPlayers.push(new Player("powerPuff"));
 
     this.friendlyObjects.push(
       new FriendlyObj("flame"),
-      new FriendlyObj("bottle")
+      new FriendlyObj("bottle"),
+      // new FriendlyObj("princess"),
+      new FriendlyObj("dragon"),
+      new FriendlyObj("flyingpig")
     );
     //this.vehicles = new Vehicles();
   }
@@ -26,7 +30,7 @@ class Game {
   }
   draw() {
     //this.background.draw();
-
+    this.grandma.drawGrandma();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
     this.friendlyObjects.forEach(function(obj) {
@@ -82,7 +86,7 @@ class Game {
       textSize(120);
       fill(245, 66, 66);
       text("GAME OVER", width / 2, height * 0.7);
-      text("Sorry you ran out of time :( " + score, width / 2, height * 0.9);
+      text("Sorry you ran out of time :( " + score, width / 2, height * 0.8);
       ext("You have " + score + "points", width / 2, height * 0.9);
     }
     textSize(60);
@@ -323,12 +327,12 @@ class Player {
     }
   }
   moveLeft() {
-    if (this.xlocation > 0 || this.xlocation > 1080) {
+    if (this.xlocation > width * 0.1 || this.xlocation > 1080) {
       this.xlocation -= 100 + this.image.speed;
     }
   }
   moveRight() {
-    if (this.xlocation > 0 || this.xlocation > 1080) {
+    if (this.xlocation < 0 || this.xlocation < 1600) {
       this.xlocation += 200 + this.image.speed;
     }
   }
@@ -365,12 +369,13 @@ class Player {
 //OBSTACLES
 class Obstacles {
   constructor() {
-    this.width = 70;
-    this.height = 70;
+    this.width = 200;
+    this.height = 200;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     this.stopSign = loadImage("stopSign.png");
     this.trafficLight = loadImage("trafficLight.png");
+    this.grandma = loadImage("grandma.gif");
   }
 
   setup() {}
@@ -385,7 +390,16 @@ class Obstacles {
     );
     this.pushUp();
   }
-
+  drawGrandma() {
+    image(
+      this.grandma,
+      this.xlocation,
+      this.ylocation,
+      this.width,
+      this.height
+    );
+    this.pushUp();
+  }
   drawStopSign() {
     image(
       this.stopSign,
@@ -446,14 +460,38 @@ class Obstacles {
 //FRIENDS
 class FriendlyObj {
   constructor(type) {
-    this.height = 100;
-    this.width = 100;
+    this.height = 150;
+    this.width = 150;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100 - this.height);
 
     if (type == "flame") {
       this.image = {
         src: loadImage("flame2.png"),
+        x: 0,
+        y: 0,
+        speed: 5
+      };
+    }
+    if (type == "dragon") {
+      this.image = {
+        src: loadImage("dragon.png"),
+        x: 0,
+        y: 0,
+        speed: 5
+      };
+    }
+    if (type == "flyingpig") {
+      this.image = {
+        src: loadImage("flyingPig.gif"),
+        x: 0,
+        y: 0,
+        speed: 5
+      };
+    }
+    if (type == "princess") {
+      this.image = {
+        src: loadImage("princess.png"),
         x: 0,
         y: 0,
         speed: 5
