@@ -49,6 +49,10 @@ class Game {
     this.manyPlayers.forEach(player => {
       this.trafficLight.collides(player);
     });
+
+    this.manyPlayers.forEach(player => {
+      this.grandma.collides(player);
+    });
     ///!!!!
     this.manyPlayers.forEach(player => {
       this.friendlyObjects.forEach(friendlyObj => {
@@ -118,6 +122,7 @@ function keyPressed() {
 
 function moveObjects() {
   if (keyCode >= 32) {
+    game.grandma.moveDown();
     game.stopSign.moveDown();
     game.trafficLight.moveDown();
     game.friendlyObjects.forEach(function(obj) {
@@ -317,23 +322,23 @@ class Player {
   //MOVE/////////////////////////////////////
   moveDown() {
     if (this.ylocation < 800) {
-      this.ylocation += 100 + this.image.speed;
+      this.ylocation += 150 + this.image.speed;
     }
   }
 
   moveUp() {
     if (this.ylocation > 650) {
-      this.ylocation -= 100 + this.image.speed;
+      this.ylocation -= 150 + this.image.speed;
     }
   }
   moveLeft() {
     if (this.xlocation > width * 0.1 || this.xlocation > 1080) {
-      this.xlocation -= 100 + this.image.speed;
+      this.xlocation -= 150 + this.image.speed;
     }
   }
   moveRight() {
     if (this.xlocation < 0 || this.xlocation < 1600) {
-      this.xlocation += 200 + this.image.speed;
+      this.xlocation += 150 + this.image.speed;
     }
   }
 
@@ -489,14 +494,15 @@ class FriendlyObj {
         speed: 5
       };
     }
-    if (type == "princess") {
-      this.image = {
-        src: loadImage("princess.png"),
-        x: 0,
-        y: 0,
-        speed: 5
-      };
-    } else if (type == "bottle") {
+    // if (type == "princess") {
+    //   this.image = {
+    //     src: loadImage("princess.png"),
+    //     x: 0,
+    //     y: 0,
+    //     speed: 5
+    //   };
+    // }
+    else if (type == "bottle") {
       this.image = {
         src: loadImage("flame_bottle.png"),
         x: 0,
