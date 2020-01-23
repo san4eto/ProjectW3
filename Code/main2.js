@@ -44,34 +44,30 @@ class Game {
     this.manyPlayers.forEach(player => {
       this.trafficLight.collides(player);
     });
+    ///!!!!
+    this.manyPlayers.forEach(player => {
+      this.friendlyObjects.forEach(friendlyObj => {
+        if (friendlyObj.collides(player)) {
+          friendlyObj.ylocation = -100;
+          timer += 1;
+        }
+      });
+    });
 
-    // this.manyPlayers.forEach(player => {
-    //   this.friendlyObjects.forEach.collides(player);
-    // });
-
-    //this.vehicles.draw();
-
-    //////////
-    // if (frameCount % 1200 === 0) {
-    //   this.friendlyObj.push(new FriendlyObj());
-    // }
-
-    // this.friendlyObjects = this.friendlyObjects.filter(
-    //   function() {
-    //     if (
-    //       !friendlyObj.collides(this.player) &&
-    //       friendlyObj.xlocation + friendlyObj.width >= 0
-    //     ) {
-    //       return true;
-    //     }
-    //   }.bind(this)
-    // );
-
-    // this.obstacles.forEach(function(obstacle) {
-    //   obstacle.draw();
-    // });
-
-    /////////
+    textAlign(CENTER, CENTER);
+    textSize(70);
+    text(timer.toFixed(2), 1800, 100);
+    // textfont(Helvetica);
+    fill(250, 222, 7);
+    if (frameCount % frameCountdivider == 0 && timer > 0) {
+      // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+      timer--;
+    }
+    if (timer > 0) {
+    } else {
+      timer = 0;
+      text("GAME OVER", width / 2, height * 0.7);
+    }
   }
 }
 const game = new Game();
@@ -118,13 +114,14 @@ function preload() {
   layer3 = loadImage("Background/layer_03.png");
   layer2 = loadImage("Background/layer_02.png");
   layer1 = loadImage("Background/layer_01.png");
+  //finalBuilding = loadImage("Background/final building.png");
   game.init();
 }
-
+let frameCountdivider = 60;
 let yCanvas = 0;
 let buildingsImg = 650;
 let roadDirection = 500;
-
+let timer = 60;
 function setup() {
   createCanvas(1920, 1080);
 
@@ -146,6 +143,7 @@ function draw() {
   }
   image(sky, 0, yCanvas);
   image(layer7, 0, yCanvas);
+  //image(finalBuilding, 500, buildingsImg);
   image(layer6, 0, buildingsImg);
   image(layer5, 0, buildingsImg);
   image(layer4, 0, buildingsImg);
@@ -339,7 +337,7 @@ class Obstacles {
     this.width = 70;
     this.height = 70;
     this.xlocation = Math.floor(Math.random() * 10) * 100;
-    this.ylocation = Math.floor(Math.random() * 6 + 1) * 100;
+    this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     this.stopSign = loadImage("stopSign.png");
     this.trafficLight = loadImage("trafficLight.png");
   }
@@ -354,6 +352,7 @@ class Obstacles {
       this.width,
       this.height
     );
+    this.pushUp();
   }
 
   drawStopSign() {
@@ -364,6 +363,15 @@ class Obstacles {
       this.width,
       this.height
     );
+
+    this.pushUp();
+  }
+
+  pushUp() {
+    if (this.ylocation > height) {
+      this.xlocation = Math.floor(Math.random() * 10) * 100;
+      this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
+    }
   }
 
   moveDown() {
@@ -394,9 +402,11 @@ class Obstacles {
       return false;
     }
 
-    console.log("collision detected -> we can play the sound");
     //game.coinSound.play();
-    counter += 1;
+    timer -= 0.1;
+    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
+
     return true;
   }
 }
@@ -462,8 +472,11 @@ class FriendlyObj {
       return false;
     }
 
-    // collision detected -> we can play the sound
-    game.coinSound.play();
+    console.log("ollision");
+    //collision detected -> we can play the sound
+    //game.coinSound.play();
+    //frameCountdivider += 0.02;
+    timer += 0.1;
 
     return true;
   }
