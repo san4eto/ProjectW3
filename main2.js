@@ -149,9 +149,12 @@ function moveObjects() {
     });
   }
 }
-
+let friendlySound;
+let badSound;
 function preload() {
   console.log("preload");
+  friendlySound = loadSound("coin_collect.mp3");
+  badSound = loadSound("crash.mp3");
   myFont = loadFont("ConcertOne-Regular.ttf");
   myFont2 = loadFont("Quantico-BoldItalic.ttf");
   myFont3 = loadFont("ConcertOne-Regular.ttf");
@@ -202,7 +205,8 @@ function draw() {
   image(layer2, 0, buildingsImg);
   image(layer1, 0, buildingsImg);
   image(road, 0, roadDirection);
-
+  friendlySound;
+  badSound;
   game.draw();
 }
 
@@ -471,7 +475,7 @@ class Obstacles {
       return false;
     }
 
-    //game.coinSound.play();
+    badSound.play();
     timer--;
 
     this.xlocation = Math.floor(Math.random() * 20) * 100;
@@ -580,6 +584,7 @@ class FriendlyObj {
     //frameCountdivider += 0.02;
     timer++;
     score++;
+    friendlySound.play();
     this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     return true;
