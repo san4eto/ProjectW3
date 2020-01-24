@@ -70,7 +70,11 @@ class Game {
     // textfont(Helvetica);
     fill(255, 255, 255);
 
-    if (this.started == true && frameCount % frameCountdivider == 0) {
+    if (
+      this.started == true &&
+      frameCount % frameCountdivider == 0 &&
+      timer > 0
+    ) {
       timer--;
       console.log(this.started);
     }
@@ -97,15 +101,16 @@ class Game {
     // }
     if (timer <= 0 && score > 0) {
       textSize(120);
-      text("GAME OVER", width / 2, height * 0.7);
-      text("Congratulations your score is: " + score, width / 2, height * 0.9);
+      text("GAME OVER", width / 2, height * 0.5);
+      text("Congratulations!", width / 2, height * 0.7);
+      text("Your score is: " + score, width / 2, height * 0.8);
     }
     if (timer <= 0 && score == 0) {
       textSize(120);
       fill(245, 66, 66);
-      text("GAME OVER", width / 2, height * 0.7);
-      text("Sorry you ran out of time :( " + score, width / 2, height * 0.8);
-      ext("You have " + score + "points", width / 2, height * 0.9);
+      text("GAME OVER", width / 2, height * 0.5);
+      text("Sorry you ran out of time :( " + score, width / 2, height * 0.7);
+      ext("You have " + score + "points", width / 2, height * 0.8);
     }
     textSize(60);
     text("Score: " + score, 1645, 160);
@@ -403,7 +408,7 @@ class Obstacles {
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     this.stopSign = loadImage("stopSign.png");
     this.trafficLight = loadImage("trafficLight.png");
-    this.grandma = loadImage("grandma.gif");
+    this.grandma = loadImage("grandma.png");
   }
 
   setup() {}
@@ -449,11 +454,11 @@ class Obstacles {
 
   moveDown() {
     if (keyCode >= 32) {
-      this.ylocation += 2;
+      this.ylocation += 4;
       this.xlocation = this.xlocation + random(-3, 3);
     }
 
-    if (this.ylocation > 1080) {
+    if (this.ylocation > 1080 && timer >= 0) {
       this.ylocation = this.ylocation;
     }
   }
@@ -476,7 +481,7 @@ class Obstacles {
     }
 
     badSound.play();
-    timer--;
+    timer -= 5;
 
     this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
@@ -495,7 +500,7 @@ class FriendlyObj {
 
     if (type == "flame") {
       this.image = {
-        src: loadImage("flame2.png"),
+        src: loadImage("flame2N.png"),
         x: 0,
         y: 0,
         speed: 5
