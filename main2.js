@@ -4,6 +4,7 @@ class Game {
     this.obstacles = [];
     this.friendlyObjects = [];
     this.manyPlayers = [];
+    this.started = false;
   }
 
   init() {
@@ -30,6 +31,7 @@ class Game {
   }
   draw() {
     //this.background.draw();
+
     this.grandma.drawGrandma();
     this.stopSign.drawStopSign();
     this.trafficLight.drawTraffic();
@@ -67,20 +69,32 @@ class Game {
     text("Time left: " + timer + "sec", 1650, 100);
     // textfont(Helvetica);
     fill(255, 255, 255);
-    if (frameCount % frameCountdivider == 0 && timer > 0) {
-      // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+
+    if (this.started == true && frameCount % frameCountdivider == 0) {
       timer--;
+      console.log(this.started);
     }
+    // if (frameCount % frameCountdivider == 0 && timer > 0) {
+    //   // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+
+    //   timer--;
+    // }
     if (Math.floor(timer) == 90) {
       textSize(90);
       fill(245, 197, 66);
-      text("Press any key to start the GAME", width / 2, height * 0.7);
+      text("Press any key to start the GAME", width / 2, height * 0.5);
+      textSize(50);
+      text(
+        " gather heat points & help Bubbles deliver the pizza while it is still warm",
+        width / 2,
+        height * 0.6
+      );
     }
-    if (Math.floor(timer) == 30) {
-      textSize(90);
-      fill(245, 197, 66);
-      text("HURRY UP!", width / 2, height * 0.7);
-    }
+    // if (Math.floor(timer) == 30) {
+    //   textSize(90);
+    //   fill(245, 197, 66);
+    //   text("HURRY UP!", width / 2, height * 0.7);
+    // }
     if (timer <= 0 && score > 0) {
       textSize(120);
       text("GAME OVER", width / 2, height * 0.7);
@@ -103,25 +117,30 @@ function keyPressed() {
   if (keyCode === 37) {
     game.manyPlayers.forEach(function(obj) {
       obj.moveLeft();
+      game.started = true;
     });
     console.log("left");
   } else if (keyCode === 38) {
     game.manyPlayers.forEach(function(obj) {
       obj.moveUp();
+      game.started = true;
     });
   } else if (keyCode === 39) {
     game.manyPlayers.forEach(function(obj) {
       obj.moveRight();
+      game.started = true;
     });
   } else if (keyCode === 40) {
     game.manyPlayers.forEach(function(obj) {
       obj.moveDown();
+      game.started = true;
     });
   }
 }
 
 function moveObjects() {
   if (keyCode >= 32) {
+    game.started = true;
     game.grandma.moveDown();
     game.stopSign.moveDown();
     game.trafficLight.moveDown();
@@ -290,14 +309,14 @@ function draw() {
 
 class Player {
   constructor(type) {
-    this.xlocation = 900; //width - this.width;
-    this.ylocation = 900; //height - this.height;
-    this.width = 200;
-    this.height = 200;
+    this.xlocation = 700; //width - this.width;
+    this.ylocation = 700; //height - this.height;
+    this.width = 300;
+    this.height = 300;
 
     if (type == "powerPuff") {
       this.image = {
-        src: loadImage("DeliveryHeroes/bubblesPowerpuff.png"),
+        src: loadImage("DeliveryHeroes/bubblesPizza.png"),
         x: 0,
         y: 0,
         speed: 15
@@ -321,24 +340,24 @@ class Player {
 
   //MOVE/////////////////////////////////////
   moveDown() {
-    if (this.ylocation < 800) {
-      this.ylocation += 150 + this.image.speed;
+    if (this.ylocation < 0.7 * height) {
+      this.ylocation += 50 + this.image.speed;
     }
   }
 
   moveUp() {
-    if (this.ylocation > 650) {
-      this.ylocation -= 150 + this.image.speed;
+    if (this.ylocation > 0.6 * height) {
+      this.ylocation -= 50 + this.image.speed;
     }
   }
   moveLeft() {
-    if (this.xlocation > width * 0.1 || this.xlocation > 1080) {
-      this.xlocation -= 150 + this.image.speed;
+    if (this.xlocation > width * 0.05 || this.xlocation > width) {
+      this.xlocation -= 50 + this.image.speed;
     }
   }
   moveRight() {
-    if (this.xlocation < 0 || this.xlocation < 1600) {
-      this.xlocation += 150 + this.image.speed;
+    if (this.xlocation < 0 || this.xlocation < 0.8 * width) {
+      this.xlocation += 50 + this.image.speed;
     }
   }
 
@@ -376,7 +395,7 @@ class Obstacles {
   constructor() {
     this.width = 200;
     this.height = 200;
-    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     this.stopSign = loadImage("stopSign.png");
     this.trafficLight = loadImage("trafficLight.png");
@@ -419,7 +438,7 @@ class Obstacles {
 
   pushUp() {
     if (this.ylocation > height) {
-      this.xlocation = Math.floor(Math.random() * 10) * 100;
+      this.xlocation = Math.floor(Math.random() * 20) * 100;
       this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     }
   }
@@ -455,7 +474,7 @@ class Obstacles {
     //game.coinSound.play();
     timer--;
 
-    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
 
     return true;
@@ -467,7 +486,7 @@ class FriendlyObj {
   constructor(type) {
     this.height = 150;
     this.width = 150;
-    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100 - this.height);
 
     if (type == "flame") {
@@ -534,7 +553,7 @@ class FriendlyObj {
   }
   pushUp() {
     if (this.ylocation > height) {
-      this.xlocation = Math.floor(Math.random() * 10) * 100;
+      this.xlocation = Math.floor(Math.random() * 20) * 100;
       this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     }
   }
@@ -561,7 +580,7 @@ class FriendlyObj {
     //frameCountdivider += 0.02;
     timer++;
     score++;
-    this.xlocation = Math.floor(Math.random() * 10) * 100;
+    this.xlocation = Math.floor(Math.random() * 20) * 100;
     this.ylocation = -(Math.floor(Math.random() * 6 + 1) * 100);
     return true;
   }
