@@ -101,13 +101,14 @@ class Game {
     // }
     if (timer <= 0 && score > 0) {
       textSize(120);
+      fill(245, 197, 66);
       text("GAME OVER", width / 2, height * 0.5);
       text("Congratulations!", width / 2, height * 0.7);
       text("Your score is: " + score, width / 2, height * 0.8);
     }
     if (timer <= 0 && score == 0) {
       textSize(120);
-      fill(245, 66, 66);
+      fill(245, 197, 66);
       text("GAME OVER", width / 2, height * 0.5);
       text("Sorry you ran out of time :( " + score, width / 2, height * 0.7);
       ext("You have " + score + "points", width / 2, height * 0.8);
